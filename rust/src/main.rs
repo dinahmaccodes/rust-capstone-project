@@ -93,6 +93,7 @@ fn main() -> bitcoincore_rpc::Result<()> {
     }
     println!("Blocks mined: {}", blocks_mined);
 
+
     // Bitcoin block rewards (coinbase transactions) require 100 confirmations to mature and become spendable.
     // This means you need to mine at least 101 blocks (100 confirmations + 1 initial block) to get a positive spendable balance.
     // This is a security feature to prevent issues if the blockchain reorganizes.
@@ -208,5 +209,3 @@ fn main() -> bitcoincore_rpc::Result<()> {
 
     Ok(())
 }
-
-
