@@ -49,7 +49,7 @@ fn main() -> bitcoincore_rpc::Result<()> {
 
     // Get blockchain info
     let blockchain_info = rpc.get_blockchain_info()?;
-    println!("Blockchain Info: {:?}", blockchain_info);
+    println!("Blockchain Info: {blockchain_info:?}");
 
     // Create/Load the wallets, named 'Miner' and 'Trader'. Have logic to optionally create/load them if they do not exist or not loaded already.
     for wallet_name in ["Miner", "Trader"] {
@@ -91,19 +91,19 @@ fn main() -> bitcoincore_rpc::Result<()> {
         blocks_mined += 1;
         balance = miner_wallet.get_balance(None, None)?.to_btc();
     }
-    println!("Blocks mined: {}", blocks_mined);
+    println!("Blocks mined: {blocks_mined}");
 
     // Bitcoin block rewards (coinbase transactions) require 100 confirmations to mature and become spendable.
     // This means you need to mine at least 101 blocks (100 confirmations + 1 initial block) to get a positive spendable balance.
     // This is a security feature to prevent issues if the blockchain reorganizes.
 
-    println!("Miner wallet balance: {} BTC", balance);
+    println!("Miner wallet balance: {balance} BTC");
     // Load Trader wallet and generate a new address
     // The receiving address for trader
     let trader_address = trader_wallet
         .get_new_address(Some("Received"), None)?
         .assume_checked();
-    println!("Receiving address for trader: {}", trader_address);
+    println!("Receiving address for trader: {trader_address}");
 
     // Send 20 BTC from Miner to Trader
     let txid = miner_wallet.send_to_address(
@@ -116,7 +116,7 @@ fn main() -> bitcoincore_rpc::Result<()> {
         None,
         None,
     )?;
-    println!("Funds of 20BTC sent from miner to trader with ID: {}", txid);
+    println!("Funds of 20BTC sent from miner to trader with ID: {txid}");
 
     // Check transaction in mempool
     let mempool_entry = miner_wallet.get_mempool_entry(&txid);
@@ -185,9 +185,9 @@ fn main() -> bitcoincore_rpc::Result<()> {
         out_file,
         "{}",
         if miner_input_amount.fract() == 0.0 {
-            format!("{:.0}", miner_input_amount)
+            format!("{miner_input_amount:.0}")
         } else {
-            format!("{:.8}", miner_input_amount)
+            format!("{miner_input_amount:.8}")
         }
     )?;
     writeln!(out_file, "{trader_output_address}")?;
@@ -195,13 +195,13 @@ fn main() -> bitcoincore_rpc::Result<()> {
         out_file,
         "{}",
         if trader_output_amount.fract() == 0.0 {
-            format!("{:.0}", trader_output_amount)
+            format!("{trader_output_amount:.0}")
         } else {
-            format!("{:.8}", trader_output_amount)
+            format!("{trader_output_amount:.8}")
         }
     )?;
     writeln!(out_file, "{miner_change_address}")?;
-    writeln!(out_file, "{:.8}", miner_change_amount)?;
+    writeln!(out_file, "{miner_change_amount:.8}")?;
     writeln!(out_file, "{:.8}", tx_fee.abs())?;
     writeln!(out_file, "{block_height}")?;
     writeln!(out_file, "{block_hash}")?;
